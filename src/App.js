@@ -1,23 +1,76 @@
-import logo from './logo.svg';
+import Header from './Header/Header';
+import Home from './Home/Home';
+import Checkout from './Checkout/Checkout';
+import { Routes, Route } from 'react-router-dom';
+import HomeSingleProduct from './Home/HomeSingleProduct';
+import Login from './Login/Login';
 import './App.css';
+import { useEffect } from 'react';
+import { auth} from './firebase'
+
 
 function App() {
+
+  //will create listener to always keep track on who's sign in
+  useEffect(()=>{
+    // [] will only run once when the app component loads.....
+    auth.onAuthStateChanged(authUser => {
+      console.log(`The user is ${{...authUser}}`);
+      if(authUser){
+        // the user just logged in ||  the use was logged in
+        
+      }else {
+        // the user is logged out
+      }
+    })
+  },[]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    //BEM
+
+    <div className="app">
+      <Routes>
+
+        <Route
+          exact
+          path='/login'
+          element={<Login/>}
+        />
+        <Route
+          exact
+          path='/homeproduct'
+          
+          element={<><Header /><HomeSingleProduct/></>}
+        />
+        <Route
+          exact
+          path="/checkout"
+          element={
+            <>
+              <Header />
+              <Checkout />{' '}
+            </>
+          }
+        />
+        <Route
+          exact
+          path="/"
+          element={
+            <>
+              <Header />
+              <Home />
+            </>
+          }
+        />
+        {/* <Route
+          path="/"
+          render={(props) => (
+            <div>
+              <Header />
+              <Home />
+            </div>
+          )}
+        /> */}
+      </Routes>
     </div>
   );
 }
